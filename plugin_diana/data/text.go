@@ -8,15 +8,16 @@ import (
 	"os"
 	"sync"
 	"time"
-	"unsafe"
 
 	log "github.com/sirupsen/logrus"
+
+	"github.com/FloatTech/ZeroBot-Plugin/data"
 )
 
 const (
 	datapath = "data/Diana"
 	pbfile   = datapath + "/text.pb"
-	pburl    = "https://codechina.csdn.net/u011570312/ZeroBot-Plugin/-/raw/master/data/Diana/text.pb"
+	pburl    = "https://codechina.csdn.net/u011570312/ZeroBot-Plugin/-/raw/master/" + pbfile
 )
 
 var (
@@ -26,7 +27,7 @@ var (
 	// m 小作文保存锁
 	m sync.Mutex
 	// md5s 验证重复
-	md5s [][16]byte
+	md5s []*[16]byte
 )
 
 func init() {
@@ -40,9 +41,10 @@ func init() {
 		if err1 == nil {
 			arrl := len(*Array)
 			log.Printf("[Diana]读取%d条小作文", arrl)
-			md5s = make([][16]byte, arrl)
+			md5s = make([]*[16]byte, arrl)
 			for i, t := range *Array {
-				md5s[i] = md5.Sum(str2bytes(t))
+				m := md5.Sum(data.Str2bytes(t))
+				md5s[i] = &m
 			}
 		} else {
 			log.Printf("[Diana]读取小作文错误：%v", err1)
@@ -91,20 +93,20 @@ func LoadText() error {
 
 // AddText 添加小作文
 func AddText(txt string) error {
-	sum := md5.Sum(str2bytes(txt))
-	if txt != "" && !isin(sum) {
+	sum := md5.Sum(data.Str2bytes(txt))
+	if txt != "" && !isin(&sum) {
 		m.Lock()
 		defer m.Unlock()
 		compo.Array = append(compo.Array, txt)
-		md5s = append(md5s, sum)
+		md5s = append(md5s, &sum)
 		return savecompo()
 	}
 	return nil
 }
 
-func isin(sum [16]byte) bool {
+func isin(sum *[16]byte) bool {
 	for _, t := range md5s {
-		if t == sum {
+		if *t == *sum {
 			return true
 		}
 	}
@@ -126,11 +128,4 @@ func savecompo() error {
 		}
 	}
 	return err
-}
-
-// str2bytes Fast convert
-func str2bytes(s string) []byte {
-	x := (*[2]uintptr)(unsafe.Pointer(&s))
-	h := [3]uintptr{x[0], x[1], x[1]}
-	return *(*[]byte)(unsafe.Pointer(&h))
 }

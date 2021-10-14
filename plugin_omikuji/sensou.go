@@ -17,14 +17,12 @@ const (
 )
 
 func init() { // 插件主体
-	// TODO: 1.17 特性暂不增加
-	// rand.Seed(time.Now().UnixMicro())
 	rand.Seed(time.Now().UnixNano())
 	control.Register("omikuji", &control.Options{
 		DisableOnDefault: false,
 		Help: "浅草寺求签\n" +
-			"- 求签|运势|占卜",
-	}).OnFullMatchGroup([]string{"求签", "运势", "占卜"}).SetPriority(10).SetBlock(true).
+			"- 求签|占卜",
+	}).OnFullMatchGroup([]string{"求签", "占卜"}).SetPriority(10).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			miku := rand.Intn(100) + 1
 			ctx.SendChain(

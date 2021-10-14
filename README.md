@@ -10,15 +10,38 @@
 [![OICQ](https://img.shields.io/badge/OneBot-OICQ-green.svg?style=social&logo=appveyor)](https://github.com/takayama-lily/node-onebot)
 [![MIRAI](https://img.shields.io/badge/OneBot-Mirai-green.svg?style=social&logo=appveyor)](https://github.com/yyuueexxiinngg/onebot-kotlin)
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/Yiwen-Chan/ZeroBot-Plugin?style=flat-square&logo=go)](https://goreportcard.com/report/github.com/github.com/Yiwen-Chan/ZeroBot-Plugin)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FloatTech/ZeroBot-Plugin?style=flat-square&logo=go)](https://goreportcard.com/report/github.com/github.com/Yiwen-Chan/ZeroBot-Plugin)
 [![Badge](https://img.shields.io/badge/onebot-v11-black?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAMAAADxPgR5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAxQTFRF////29vbr6+vAAAAk1hCcwAAAAR0Uk5T////AEAqqfQAAAKcSURBVHja7NrbctswDATQXfD//zlpO7FlmwAWIOnOtNaTM5JwDMa8E+PNFz7g3waJ24fviyDPgfhz8fHP39cBcBL9KoJbQUxjA2iYqHL3FAnvzhL4GtVNUcoSZe6eSHizBcK5LL7dBr2AUZlev1ARRHCljzRALIEog6H3U6bCIyqIZdAT0eBuJYaGiJaHSjmkYIZd+qSGWAQnIaz2OArVnX6vrItQvbhZJtVGB5qX9wKqCMkb9W7aexfCO/rwQRBzsDIsYx4AOz0nhAtWu7bqkEQBO0Pr+Ftjt5fFCUEbm0Sbgdu8WSgJ5NgH2iu46R/o1UcBXJsFusWF/QUaz3RwJMEgngfaGGdSxJkE/Yg4lOBryBiMwvAhZrVMUUvwqU7F05b5WLaUIN4M4hRocQQRnEedgsn7TZB3UCpRrIJwQfqvGwsg18EnI2uSVNC8t+0QmMXogvbPg/xk+Mnw/6kW/rraUlvqgmFreAA09xW5t0AFlHrQZ3CsgvZm0FbHNKyBmheBKIF2cCA8A600aHPmFtRB1XvMsJAiza7LpPog0UJwccKdzw8rdf8MyN2ePYF896LC5hTzdZqxb6VNXInaupARLDNBWgI8spq4T0Qb5H4vWfPmHo8OyB1ito+AysNNz0oglj1U955sjUN9d41LnrX2D/u7eRwxyOaOpfyevCWbTgDEoilsOnu7zsKhjRCsnD/QzhdkYLBLXjiK4f3UWmcx2M7PO21CKVTH84638NTplt6JIQH0ZwCNuiWAfvuLhdrcOYPVO9eW3A67l7hZtgaY9GZo9AFc6cryjoeFBIWeU+npnk/nLE0OxCHL1eQsc1IciehjpJv5mqCsjeopaH6r15/MrxNnVhu7tmcslay2gO2Z1QfcfX0JMACG41/u0RrI9QAAAABJRU5ErkJggg==)](https://github.com/howmanybots/onebot)
-[![Badge](https://img.shields.io/badge/zerobot-v1.2.3-black?style=flat-square&logo=go)](https://github.com/wdvxdr1123/ZeroBot)
+[![Badge](https://img.shields.io/badge/zerobot-v1.3.0-black?style=flat-square&logo=go)](https://github.com/wdvxdr1123/ZeroBot)
 [![License](https://img.shields.io/github/license/Yiwen-Chan/OneBot-YaYa.svg?style=flat-square&logo=gnu)](https://raw.githubusercontent.com/FloatTech/ZeroBot-Plugin/master/LICENSE)
 [![qq group](https://img.shields.io/badge/group-1048452984-red?style=flat-square&logo=tencent-qq)](https://jq.qq.com/?_wv=1027&k=QMb7x1mM)
 
 </div>
 
+## 命令行参数
+```bash
+zerobot -h -t token -u url [-d|w] [-g] qq1 qq2 qq3 ...
+```
+- **-h**: 显示帮助
+- **-t token**: 设置`AccessToken`，默认为空
+- **-u url**: 设置`Url`，默认为`ws://127.0.0.1:6700`
+- **-d|w**: 开启 debug | warning 级别及以上日志输出
+- **-g**: 开启 [webgui](https://github.com/FloatTech/bot-manager)
+- **qqs**: superusers 的 qq 号
+
 ## 功能
+> 在编译时，以下功能除插件控制外，均可通过注释`main.go`中的相应`import`而物理禁用，减小插件体积。
+> 通过插件控制，还可动态管理某个功能在某个群的打开/关闭。
+- **web管理**
+    - 因为开启后可执行文件大约增加 5M ，默认注释不开启。
+    - 需要配合 [webgui](https://github.com/FloatTech/bot-manager) 使用
+- **动态加载插件**
+    - [x] /刷新插件
+    - [x] /加载插件 service名
+    - [x] /卸载插件 service名
+    - 仅 Linux, FreeBSD, macOS 可用，默认注释不开启。
+    - 开启后主可执行文件大约增加 2M ，每个插件的`.so`文件约为 2 ~ 10 M ，如非必要建议不开启。
+    - 动态加载的插件需放置在`plugins/`下，需命名为`service名.so`，编译模版详见[ZeroBot-Hook](https://github.com/fumiama/ZeroBot-Hook)。
 - **插件控制**
     - [x] /启用 xxx
     - [x] /禁用 xxx
@@ -101,8 +124,11 @@
     - [x] 设置随机图片网址[url]
     - [x] 太涩了(撤回最近发的图)
     - [x] 评价图片(发送一张图片让bot评分)
+- **每日运势** `github.com/FloatTech/ZeroBot-Plugin/plugin_fortune`
+    - [x] 运势|抽签
+    - [x] 设置底图[车万 DC4 爱因斯坦 星空列车 樱云之恋 富婆妹 李清歌 公主连结 原神 明日方舟 碧蓝航线 碧蓝幻想 战双 阴阳师]
 - **浅草寺求签** `github.com/FloatTech/ZeroBot-Plugin/plugin_omikuji`
-    - [x] 求签|运势|占卜
+    - [x] 求签|占卜
 - **bilibili** `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin_bilibili"`
     - [x] >vup info [名字|uid]
 	- [x] >user info [名字|uid]
@@ -114,6 +140,7 @@
     - [x] [回复]查重
 - **AIfalse** `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin_ai_false"`
     - [x] 查询计算机当前活跃度 [身体检查]
+    - [x] 清理缓存
     - [ ] 简易语音
     - [ ] 爬图合成 [@xxx]
 - **minecraft** `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin_minecraft"`
@@ -133,6 +160,9 @@
     - [x] ?? [缩写]
 - **选择困难症帮手** `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin_choose"`
     - [x] 选择[选择项1]还是[选项2]还是[更多选项]
+- **投胎** `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin_reborn"`
+    - [x] reborn
+    - 注：本插件来源于[tgbot](https://github.com/YukariChiba/tgbot/blob/main/modules/Reborn.py)
 - **TODO...**
 
 ## 使用方法
@@ -164,7 +194,7 @@
 1. 点击右上角 Fork 本项目，并转跳到自己 Fork 的仓库
 2. 点击仓库上方的 Actions 按钮，确认使用 Actions
 3. 编辑 main.go 文件，内容按需修改
-4. 前往 Release 页面发布一个 Release，`tag`形如`vx.y.z`，以触发稳定版编译流程
+4. 前往 Release 页面发布一个 Release，`tag`形如`v1.2.3`，以触发稳定版编译流程
 5. 点击 Actions 按钮，等待编译完成，回到 Release 页面下载编译好的文件
 6. 运行 OneBot 框架，并同时运行本插件
 7. 啾咪~

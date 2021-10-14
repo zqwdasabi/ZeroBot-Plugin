@@ -3,9 +3,13 @@ data/control
 data/SetuTime/search
 data/manager
 data/acgimage
+data/fortune
 data/hs
+plugins/*.so
+plugins/*.dll
 .idea/
 .DS_Store
 .vscode
 go-zero*
 nohup.out
+zerobot

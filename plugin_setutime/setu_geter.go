@@ -18,13 +18,13 @@ import (
 	"github.com/wdvxdr1123/ZeroBot/message"
 
 	"github.com/FloatTech/ZeroBot-Plugin/control"
-	. "github.com/FloatTech/ZeroBot-Plugin/data"
+	"github.com/FloatTech/ZeroBot-Plugin/data"
 )
 
 // Pools 图片缓冲池
 type imgpool struct {
 	Lock  sync.Mutex
-	DB    *Sqlite
+	DB    *data.Sqlite
 	Path  string
 	Group int64
 	List  []string
@@ -40,7 +40,7 @@ const (
 // NewPoolsCache 返回一个缓冲池对象
 func newPools() *imgpool {
 	cache := &imgpool{
-		DB:    &Sqlite{DBPath: "data/SetuTime/SetuTime.db"},
+		DB:    &data.Sqlite{DBPath: "data/SetuTime/SetuTime.db"},
 		Path:  "data/SetuTime/cache/",
 		Group: 0,
 		List:  []string{"涩图", "二次元", "风景", "车万"}, // 可以自己加类别，得自己加图片进数据库
@@ -48,6 +48,8 @@ func newPools() *imgpool {
 		Pool:  map[string][]*pixiv.Illust{},
 		Form:  0,
 	}
+	// 每次启动清理缓存
+	os.RemoveAll(cache.Path)
 	err := os.MkdirAll(cache.Path, 0755)
 	if err != nil {
 		panic(err)
@@ -104,7 +106,7 @@ func init() { // 插件主体
 			var imgtype = ctx.State["regex_matched"].([]string)[1]
 			// 补充池子
 			go func() {
-				times := min(pool.Max-pool.size(imgtype), 2)
+				times := data.Min(pool.Max-pool.size(imgtype), 2)
 				for i := 0; i < times; i++ {
 					illust := &pixiv.Illust{}
 					// 查询出一张图片
@@ -120,7 +122,6 @@ func init() { // 插件主体
 					ctx.SendGroupMessage(pool.Group, []message.MessageSegment{message.Image(file(illust))})
 					// 向缓冲池添加一张图片
 					pool.push(imgtype, illust)
-
 					time.Sleep(time.Second * 1)
 				}
 			}()
@@ -212,18 +213,6 @@ func firstValueInList(list []string) zero.Rule {
 			}
 		}
 		return false
-	}
-}
-
-// min 返回两数最小值
-func min(a, b int) int {
-	switch {
-	default:
-		return a
-	case a > b:
-		return b
-	case a < b:
-		return a
 	}
 }
 
